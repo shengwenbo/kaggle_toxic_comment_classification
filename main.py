@@ -30,6 +30,7 @@ def preprocess(data_dir="./data"):
     data["tokens"] = data.apply(lambda d: my_utils.tokenize(d["comment_text"]), axis=1)
     logging.info("making vocabulary...")
     vocab = my_utils.make_vocab(data["tokens"])
+    data["tokens"] = data.apply(lambda d: " ".join(d["tokens"]))
     train_data = data[data.tag == "train"]
     test_data = data[data.tag == "test"]
     #保存
@@ -49,6 +50,9 @@ def load_data(data_dir="./data", if_preprocess=False):
     logging.info("loading data from %s" % data_dir)
     train_data = pd.read_csv(os.path.join(data_dir, "train_prcssd.csv"))
     test_data = pd.read_csv(os.path.join(data_dir, "test_prcssd.csv"))
+
+    train_data["tokens"] = train_data.apply(lambda d: d["tokens"].split(" "))
+    test_data["tokens"] = test_data.apply(lambda d: d["tokens"].split(" "))
 
     train_x = train_data["tokens"].values
     train_y = train_data[LABEL_LIST].values
@@ -73,7 +77,7 @@ if __name__ == "__main__":
     train_x, train_y, test_x, train_data, test_data = load_data(data_dir=data_dir, if_preprocess=if_preprocess)
 
     logging.info("building model...")
-    model = lstm()
+    model = attention()
     restored = model.restore()
 
     if mode == "train":

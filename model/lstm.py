@@ -32,6 +32,7 @@ class lstm(object):
 
         x = Bidirectional(LSTM(128, return_sequences=True, dropout=0.15, recurrent_dropout=0.15))(x)
         x = Conv1D(64, kernel_size=3, padding='valid', kernel_initializer='glorot_uniform')(x)
+        x = Conv1D(64, kernel_size=3, padding='valid', kernel_initializer='glorot_uniform')(x)
 
         avg_pool = GlobalAveragePooling1D()(x)
         max_pool = GlobalMaxPooling1D()(x)
@@ -57,7 +58,7 @@ class lstm(object):
         ckpt_path = os.path.join(self._ckpt_path, "best_weights.hdf5")
         if os.path.exists(ckpt_path):
             logging.info("restoring model from %s" % ckpt_path)
-            self._model.load_weights(os.path.join(self._ckpt_path, "best_weights.hdf5"))
+            self._model.load_weights(os.path.join(self._ckpt_path, "best_weights.hdf5"), by_name=True)
             return True
         else:
             return False

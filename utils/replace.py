@@ -193,6 +193,7 @@ def replace(text):
     # Different regex parts for smiley faces
     eyes = "[8:=;]"
     nose = "['`\-]?"
+    text = text.lower()
     text = re.sub("https?:* ", "<URL>", text)
     text = re.sub("www.* ", "<URL>", text)
     text = re.sub("\[\[User(.*)\|", '<USER>', text)
@@ -234,4 +235,5 @@ def replace(text):
     text = text.replace('7', ' texteven ')
     text = text.replace('8', ' eight ')
     text = text.replace('9', ' nine ')
+    text = text.replace('\r', '\n')
     return text
